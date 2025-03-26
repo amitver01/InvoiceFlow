@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const rateLimit = require("express-rate-limit");
-
+const invoiceRoutes = require("./routes/invoiceRoutes");
 dotenv.config();
 
 const app = express();
@@ -23,8 +23,9 @@ const limit = rateLimit({
 app.use(limit);
 
 // API Routes
-const invoiceRoutes = require("./routes/invoiceRoutes");
+
 app.use("/api/invoices", invoiceRoutes);
+
 
 // Basic Route
 app.get("/", (req, res) => {
