@@ -2,7 +2,7 @@ const express = require("express");
 const upload = require("../middleware/uploadMiddleware"); // Import multer middleware
 const Invoice = require("../models/invoiceModel"); // Import the invoice schema
 const router = express.Router();
-const { extractText } = require("../controllers/invoiceController");
+const { extractTextAI } = require("../controllers/invoiceController");
 // Upload and Save Invoice API
 // router.post("/upload", upload.single("invoice"), async (req, res) => {
 //   try {
@@ -40,7 +40,7 @@ const { extractText } = require("../controllers/invoiceController");
 //   }
 // });
 
-router.post("/extract", upload.single("invoice"), extractText);
+router.post("/extract", upload.single("invoice"), extractTextAI);
 
 router.get("/getAllListed" , async(req , res) =>{
     try{

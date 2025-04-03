@@ -2,10 +2,14 @@ const Tesseract = require("tesseract.js");
 const Invoice = require("../models/invoiceModel");
 const OpenAI = require("openai");
 const fs = require("fs");
-
+const axios = require("axios");
 require("dotenv").config();
+
+const { GoogleGenAI } = require("@google/genai");
+
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 //console.log("API Key:", process.env.OPENAI_API_KEY);
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY});
+//const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY});
 
 
 const extractText = async (req, res) => {
@@ -45,42 +49,53 @@ const extractText = async (req, res) => {
 };
 
 
+// Import the Invoice model
+
 const extractTextAI = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     const filePath = req.file.path;
     const fileData = fs.readFileSync(filePath);
-
-    // Convert the image to Base64 format
     const base64Image = fileData.toString("base64");
 
-    // Send the image to OpenAI Vision API for processing
-    const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages: [
-        { role: "system", content: "You are an expert at extracting structured invoice data from images." },
-        { role: "user", content: "Extract invoice details (invoice number, vendor name, amount, due date, expense category) from this image." },
+    // Dynamically get the MIME type
+    const mimeType = req.file.mimetype || "image/png";
+
+    // Call Google Gemini AI
+    const response = await ai.models.generateContent({
+      model: "gemini-1.5-flash",
+      contents: [
         {
-          role: "user",
-          content: [
-            { type: "text", text: "Extract key invoice details from this image." },
-            { type: "image_url", image_url: `data:image/png;base64,${base64Image}` } // Assuming invoice is in PNG format
-          ]
-        }
-      ]
+          parts: [
+            { inlineData: { mimeType, data: base64Image } },
+            { text: "Extract invoice details in JSON format including invoice number, vendor name, amount, due date, and expense category." },
+          ],
+        },
+      ],
     });
 
-    const parsedData = JSON.parse(response.choices[0].message.content);
+    // Extract AI Response
+    const extractedText = response.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!extractedText) {
+      return res.status(500).json({ error: "Failed to extract invoice data from AI response" });
+    }
+
+    let parsedData;
+    try {
+      const cleanedText = extractedText.replace(/```json|```/g, "").trim();
+      parsedData = JSON.parse(cleanedText);
+      console.log(parsedData);
+    } catch (error) {
+      return res.status(500).json({ error: "AI response is not in JSON format", rawData: extractedText });
+    }
 
     // Save extracted invoice details in MongoDB
     const newInvoice = new Invoice({
-      invoiceNumber: parsedData.invoiceNumber || `INV-${Date.now()}`,
-      vendorName: parsedData.vendorName || "Unknown",
+      invoiceNumber: parsedData.invoice_number || `INV-${Date.now()}`,
+      vendorName: parsedData.vendor_name || "Unknown",
       amount: parsedData.amount || 0,
-      dueDate: parsedData.dueDate ? new Date(parsedData.dueDate) : new Date(),
+      dueDate: parsedData.duedate ? new Date(parsedData.dueDate) : new Date(),
       expenseCategory: parsedData.expenseCategory || "Miscellaneous",
       status: "Pending",
       fileUrl: filePath,
@@ -95,5 +110,8 @@ const extractTextAI = async (req, res) => {
     res.status(500).json({ error: "Server error", details: err.message });
   }
 };
+
+
+
 
 module.exports = { extractText , extractTextAI};
