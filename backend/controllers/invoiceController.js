@@ -1,16 +1,11 @@
 const Tesseract = require("tesseract.js");
 const Invoice = require("../models/invoiceModel");
-const OpenAI = require("openai");
 const fs = require("fs");
-const axios = require("axios");
 require("dotenv").config();
 
 const { GoogleGenAI } = require("@google/genai");
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-//console.log("API Key:", process.env.OPENAI_API_KEY);
-//const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY});
-
 
 const extractText = async (req, res) => {
   try {
@@ -47,9 +42,6 @@ const extractText = async (req, res) => {
     res.status(500).json({ error: "Server error", details: err.message });
   }
 };
-
-
-// Import the Invoice model
 
 const extractTextAI = async (req, res) => {
   try {
