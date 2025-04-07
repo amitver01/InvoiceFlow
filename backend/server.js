@@ -4,6 +4,7 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 const rateLimit = require("express-rate-limit");
 const invoiceRoutes = require("./routes/invoiceRoutes");
+const authRoutes=require("./routes/authRoutes");
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,8 @@ app.use(limit);
 // API Routes
 
 app.use("/api/invoices", invoiceRoutes);
+app.use("/api/auth", authRoutes);
+
 
 
 // Basic Route

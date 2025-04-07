@@ -16,7 +16,7 @@ function HomePage() {
       <header className="flex justify-around items-center mt-7 py-6 px-6 md:px-12 mt-">
         <h1 className="text-2xl font-bold text-black">AutoBill</h1>
         <nav className="hidden md:flex space-x-8 text-gray-700 text-lg">
-          <a href="#" className="hover:text-black">Upload</a>
+          <Link to="/upload" className="hover:text-black">Upload</Link>
           <a href="#" className="hover:text-black">Transactions</a>
           <a href="#" className="hover:text-black">Faq</a>
         </nav>
@@ -76,7 +76,7 @@ function HomePage() {
     <div>
       <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
       <ul className="space-y-3 text-white text-lg">
-      <li><Link to="/upload" className="hover:underline">Upload</Link></li>git 
+      <li><Link to="/upload" className="hover:underline">Upload</Link></li>
         <li><a href="#" className="hover:underline">Settings</a></li>
         <li><a href="#" className="hover:underline">Pricing</a></li>
       </ul>
