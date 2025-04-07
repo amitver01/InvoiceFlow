@@ -1,20 +1,23 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-
+  const navigate = useNavigate();
   const onSubmit = async (data) => {
     try {
-        console.log("here i am 1")
-      const response = await axios.get('http://localhost:5000/api/auth/login', {
+       
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
         email: data.email,
         password: data.password,
       });
-      console.log("here i am")
+      if(response.status == 200) navigate('/upload')
       // handle success (e.g., store token, redirect)
       console.log('Login success:', response.data);
+    
     } catch (error) {
       console.error('Login error:', error.response?.data?.message || error.message);
     }
