@@ -23,8 +23,9 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
+    console.log("here i am 2 backend")
     if (!user) return res.status(400).json({ message: 'Invalid credentials' });
-
+    console.log("here i am 3 backend")
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
