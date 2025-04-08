@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -117,9 +117,9 @@ const LoginForm = () => {
         {/* Sign Up Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
-            Don't have an account?{" "}
-            <a href="#" className="font-medium text-blue-600 hover:text-blue-500">Sign up</a>
-          </p>
+             Don't have an account?{" "}
+            <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-500">Sign up</Link>
+           </p>
         </div>
       </div>
     </div>
