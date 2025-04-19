@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const InvoiceUploader = ({ onUpload }) => {
   const [file, setFile] = useState(null);
@@ -15,17 +16,25 @@ const InvoiceUploader = ({ onUpload }) => {
     const formData = new FormData();
     formData.append("invoice", file);
 
+    const token = localStorage.getItem("token"); 
+
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/invoices/extract", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/invoices/extract",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+           
+          },
+        }
+      );
 
-      const data = await response.json();
-      onUpload?.(data);
+      onUpload?.(response.data);
     } catch (err) {
-      console.error("Upload failed:", err);
+      console.error("Upload failed:", err.response?.data || err.message);
+      alert("Upload failed. Please try again.");
     } finally {
       setLoading(false);
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import Cookies from "js-cookie";
 const SignUp = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
@@ -13,9 +13,13 @@ const SignUp = () => {
         name: data.name,
         email: data.email,
         password: data.password,
-      });
+      },
+      {withCredentials: true}
+    );
       if (response.status === 201) {
         console.log('Signup success:', response.data);
+        Cookies.set("token", response.data.token);
+        console.log(response.data.token);
         navigate('/login');
       }
     } catch (error) {

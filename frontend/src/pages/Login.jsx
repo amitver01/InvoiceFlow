@@ -13,11 +13,13 @@ const LoginForm = () => {
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email: data.email,
         password: data.password,
-      });
+      },
+      {withCredentials: true}
+    );
       if(response.status == 200) navigate('/upload')
-      // handle success (e.g., store token, redirect)
+     
       console.log('Login success:', response.data);
-    
+
     } catch (error) {
       console.error('Login error:', error.response?.data?.message || error.message);
     }

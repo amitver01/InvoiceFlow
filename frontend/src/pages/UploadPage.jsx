@@ -1,26 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import InvoiceUpload from "../components/InvoiceUploader";
+import { useNavigate } from 'react-router-dom';
 
 const UploadPage = () => {
-  const handleUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("invoice", file);
-    try {
-      const response = await fetch("https://your-backend-url.com/api/upload", {
-        method: "POST",
-        body: formData,
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user is logged in
+    axios.get('http://localhost:5000/api/check-auth', { withCredentials: true })
+      .then(response => {
+        // console.log('User is authenticated:', response.data);
+      })
+      .catch(error => {
+        // console.log('User is not authenticated');
+        navigate('/login');
       });
+  }, [navigate]);
 
-      if (!response.ok) {
-        throw new Error("Upload failed");
-      }
-
-      const result = await response.json();
-      alert("Upload successful! Invoice ID: " + result.id);
-    } catch (error) {
-      console.error(error);
-      alert("Failed to upload invoice.");
-    }
+  // This will receive the result from InvoiceUploader
+  const handleUpload = () => {
+    //console.log("Upload successful! Invoice data:", data);
+    alert("Upload successful! Invoice ID: "); 
   };
 
   return (
