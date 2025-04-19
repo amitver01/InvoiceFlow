@@ -5,11 +5,21 @@ const connectDB = require("./config/db");
 const rateLimit = require("express-rate-limit");
 const invoiceRoutes = require("./routes/invoiceRoutes");
 const authRoutes=require("./routes/authRoutes");
+const cookieParser = require("cookie-parser");
+const authMiddleware= require("./middleware/authMiddleware");
 dotenv.config();
-
 const app = express();
-app.use(cors());
+app.use(cookieParser());
+
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
+
+
 app.use(express.json());
+
 
 // Connect to MongoDB
 connectDB();
@@ -33,6 +43,9 @@ app.use("/api/auth", authRoutes);
 // Basic Route
 app.get("/", (req, res) => {
   res.json({ message: "Namaste - Har Har Mahadev 🚩" });
+});
+app.get('/api/check-auth', authMiddleware, (req, res) => {
+  res.status(200).json({ message: "Authenticated" });
 });
 
 // Start Server

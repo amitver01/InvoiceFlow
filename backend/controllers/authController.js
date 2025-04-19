@@ -31,7 +31,17 @@ const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-
+    // console.log("generated token from login backend");
+    // console.log(token);
+    // console.log("generated");
+    res.cookie("token", token, {
+      httpOnly: true, // secure from JS access
+      secure: false, // true in production (HTTPS)
+      sameSite: "lax", // changed from 'strict' to 'lax' for development
+      path: "/", // ensure cookie is sent on all routes
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+  
     res.status(200).json({ token, user: { id: user._id, name: user.name } });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
