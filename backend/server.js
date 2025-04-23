@@ -7,6 +7,7 @@ const invoiceRoutes = require("./routes/invoiceRoutes");
 const authRoutes=require("./routes/authRoutes");
 const cookieParser = require("cookie-parser");
 const authMiddleware= require("./middleware/authMiddleware");
+const dashBoard=require("./routes/dashBoard");
 dotenv.config();
 const app = express();
 app.use(cookieParser());
@@ -37,7 +38,7 @@ app.use(limit);
 
 app.use("/api/invoices", invoiceRoutes);
 app.use("/api/auth", authRoutes);
-
+app.use("/api" , dashBoard);
 
 
 // Basic Route

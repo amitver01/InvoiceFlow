@@ -13,7 +13,7 @@ const getDashboardData = async (req, res) => {
 
     const recentInvoices = await Invoice.find({})
       .sort({ createdAt: -1 })
-      .limit(5)
+      .limit(20)
       .select('invoiceNumber vendorName amount status dueDate createdAt');
 
     // Send back dashboard data
