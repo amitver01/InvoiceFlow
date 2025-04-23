@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 const Dashboard = () => {
   // State to store dashboard data
   const [dashboardData, setDashboardData] = useState({
@@ -45,7 +46,30 @@ const Dashboard = () => {
       </div>
     );
   }
-
+  const exportToExcel = () => {
+    const { recentInvoices, monthlyRevenue, invoiceStatusSummary } = dashboardData;
+  
+    const wb = XLSX.utils.book_new();
+  
+    if (recentInvoices && recentInvoices.length > 0) {
+      const invoiceSheet = XLSX.utils.json_to_sheet(recentInvoices);
+      XLSX.utils.book_append_sheet(wb, invoiceSheet, 'Recent Invoices');
+    }
+  
+    if (monthlyRevenue && monthlyRevenue.length > 0) {
+      const revenueSheet = XLSX.utils.json_to_sheet(monthlyRevenue);
+      XLSX.utils.book_append_sheet(wb, revenueSheet, 'Monthly Revenue');
+    }
+  
+    if (invoiceStatusSummary && invoiceStatusSummary.length > 0) {
+      const statusSheet = XLSX.utils.json_to_sheet(invoiceStatusSummary);
+      XLSX.utils.book_append_sheet(wb, statusSheet, 'Invoice Status');
+    }
+  
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'dashboard-data.xlsx');
+  };
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
       {/* Dashboard Title */}
@@ -122,6 +146,13 @@ const Dashboard = () => {
             ))}
           </tbody>
         </table>
+        <div className="mt-5 flex justify-end">
+          <button
+            onClick={exportToExcel}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Export to Excel
+          </button>
+        </div>
       </div>
     </div>
   );
