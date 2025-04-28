@@ -3,7 +3,7 @@ const upload = require("../middleware/uploadMiddleware"); // Import multer middl
 const Invoice = require("../models/invoiceModel"); // Import the invoice schema
 const router = express.Router();
 const { extractTextAI } = require("../controllers/invoiceController");
-const authMiddleware = require("../middleware/authMiddleware");
+
 
 router.post("/extract", upload.single("invoice"), extractTextAI);
 
