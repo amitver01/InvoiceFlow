@@ -21,7 +21,7 @@ app.use(cors({
 
 app.use(express.json());
 
-
+app.set('trust proxy', 1);
 // Connect to MongoDB
 connectDB();
 
