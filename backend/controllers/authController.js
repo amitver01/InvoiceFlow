@@ -35,12 +35,13 @@ const login = async (req, res) => {
     // console.log(token);
     // console.log("generated");
     res.cookie("token", token, {
-      httpOnly: true, // secure from JS access
-      secure: false, // true in production (HTTPS)
-      sameSite: "lax", // changed from 'strict' to 'lax' for development
-      path: "/", // ensure cookie is sent on all routes
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    
   
     res.status(200).json({ token, user: { id: user._id, name: user.name } });
   } catch (err) {
