@@ -1,17 +1,9 @@
 const multer = require("multer");
-const path = require("path");
 
-// Set up storage engine
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads/invoices/"); // Folder to store files
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Unique file name
-  },
-});
+// Memory storage: keeps file in memory buffer
+const storage = multer.memoryStorage();
 
-// File filter (Only allow PDFs and images)
+// File filter: only allow images and PDFs
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
   if (allowedTypes.includes(file.mimetype)) {
@@ -21,6 +13,11 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({ storage, fileFilter });
+// Multer config with file size limit
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+});
 
 module.exports = upload;
