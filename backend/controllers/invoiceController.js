@@ -43,6 +43,7 @@ const extractTextAI = async (req, res) => {
 
     // Save invoice to DB
     const newInvoice = new Invoice({
+      userId: req.user.id, 
       invoiceNumber: parsedData.invoice_number || `INV-${Date.now()}`,
       vendorName: parsedData.vendor_name || "Unknown",
       amount: parsedData.amount || 0,
@@ -54,7 +55,7 @@ const extractTextAI = async (req, res) => {
 
     await newInvoice.save();
 
-    res.json({ message: "Invoice extracted & saved", invoice: newInvoice });
+    res.json({ message: "Invoice extracted & saved" });
 
   } catch (err) {
     console.error("Error:", err);

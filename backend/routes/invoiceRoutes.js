@@ -3,17 +3,18 @@ const upload = require("../middleware/uploadMiddleware"); // Import multer middl
 const Invoice = require("../models/invoiceModel"); // Import the invoice schema
 const router = express.Router();
 const { extractTextAI } = require("../controllers/invoiceController");
+const middleware = require("../middleware/authMiddleware")
 
+router.post("/extract", middleware ,upload.single("invoice"), extractTextAI);
 
-router.post("/extract", upload.single("invoice"), extractTextAI);
-
-router.get("/getAllListed" , async(req , res) =>{
-    try{
-        const invoices = await Invoice.find();
-    res.json(invoices);
-    }catch(error){
-        res.status(500).json({ error: "Failed to fetch invoices", details: error.message });
-    }
+router.get("/getAllListed" , middleware ,async(req , res) =>{
+    try {
+        const userId = req.user.id; // set in authMiddleware
+        const invoices = await Invoice.find({ userId });
+        res.json(invoices);
+      } catch (err) {
+        res.status(500).json({ error: 'Server error', details: err.message });
+      }
 });
 
 router.put("/update-status/:id" , async(req , res) => {

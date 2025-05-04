@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Invoice = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   invoiceNumber: { type: String, required: true, unique: true },
   vendorName: { type: String, required: true },
   amount: { type: Number, required: true },

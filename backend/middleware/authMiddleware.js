@@ -4,7 +4,7 @@ const authMiddleware = (req, res, next) => {
      //console.log("Cookies:", req.cookies.token);
     // console.log("Raw Cookie Header:", req.headers.cookie);
 
-  const token = req.cookies.token; 
+  const token = req.cookies.token ||  req.headers.authorization?.split(" ")[1];
     // console.log(token);
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized: No token provided' });
@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
     // console.log("token received");
     // console.log(token);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // console.log(decoded);
+    //console.log(decoded);
     req.user = decoded; // optionally attach user info
     next();
   } catch (err) {
