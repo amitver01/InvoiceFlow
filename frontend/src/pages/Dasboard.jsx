@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+
 const Dashboard = () => {
   // State to store dashboard data
   const [dashboardData, setDashboardData] = useState({
@@ -16,9 +17,10 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/dashboard', {
-          withCredentials: true, // To send cookies if needed
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/dashboard`, {
+          withCredentials: true,
         });
+        
         setDashboardData(response.data);
       } catch (err) {
         setError('Failed to fetch dashboard data');
@@ -102,7 +104,7 @@ const Dashboard = () => {
       <div className="bg-white p-6 rounded-lg shadow-md flex justify-between items-center">
         <div>
           <h2 className="text-xl font-semibold text-gray-700">Total Revenue</h2>
-          <p className="text-3xl font-bold text-green-600">${dashboardData.totalRevenue}</p>
+          <p className="text-3xl font-bold text-green-600">₹ {dashboardData.totalRevenue}</p>
         </div>
         <div className="bg-green-100 p-4 rounded-full">
           <svg
@@ -135,11 +137,11 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {dashboardData.recentInvoices.map((invoice) => (
+            {dashboardData.recentInvoices?.map((invoice) => (
               <tr key={invoice._id} className="text-sm text-gray-700">
                 <td className="px-4 py-2 border-b">{invoice.invoiceNumber}</td>
                 <td className="px-4 py-2 border-b">{invoice.vendorName}</td>
-                <td className="px-4 py-2 border-b">${invoice.amount}</td>
+                <td className="px-4 py-2 border-b">₹{invoice.amount}</td>
                 <td className="px-4 py-2 border-b">{invoice.status}</td>
                 <td className="px-4 py-2 border-b">{new Date(invoice.dueDate).toLocaleDateString()}</td>
               </tr>

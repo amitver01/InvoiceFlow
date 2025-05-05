@@ -8,12 +8,12 @@ const UploadPage = () => {
 
   useEffect(() => {
     // Check if user is logged in
-    axios.get('http://localhost:5000/api/check-auth', { withCredentials: true })
+    axios.get(`${import.meta.env.VITE_API_URL}/api/check-auth`, { withCredentials: true })
       .then(response => {
-        // console.log('User is authenticated:', response.data);
+         console.log('User is authenticated:', response.data);
       })
       .catch(error => {
-        // console.log('User is not authenticated');
+        console.log('User is not authenticated');
         navigate('/login');
       });
   }, [navigate]);
