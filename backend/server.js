@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 
 app.use(cors({
-  origin: "https://invoice-flow-697x.vercel.app/",
+  origin: "https://invoice-flow-697x.vercel.app",
   credentials: true,
 }));
 
