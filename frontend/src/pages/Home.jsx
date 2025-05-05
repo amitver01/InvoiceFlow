@@ -6,7 +6,7 @@ function HomePage() {
   const navigate = useNavigate();
 
   const goToUploadPage = () => {
-    navigate("/upload");
+    navigate("/dashboard");
   };
 
   return (
@@ -26,8 +26,8 @@ function HomePage() {
           
           <nav className="hidden md:flex space-x-8 text-gray-700 text-lg">
             <Link to="/upload" className="hover:text-black">Upload</Link>
-            <a href="#" className="hover:text-black">Transactions</a>
-            <a href="#" className="hover:text-black">Faq</a>
+            <a href="/dashboard" className="hover:text-black">DashBoard</a>
+            <a href="/" className="hover:text-black">Home</a>
           </nav>
           <button
             onClick={goToUploadPage}

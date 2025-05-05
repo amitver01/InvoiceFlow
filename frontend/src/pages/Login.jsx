@@ -16,7 +16,10 @@ const LoginForm = () => {
       },
       {withCredentials: true}
     );
-      if(response.status == 200) navigate('/upload')
+      if(response.status == 200) 
+      {
+        navigate('/dashboard');
+      }
      
       console.log('Login success:', response.data);
 

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import InvoiceUpload from "../components/InvoiceUploader";
 import { useNavigate } from 'react-router-dom';
-
+import NavBar from '../components/Navbar';
 const UploadPage = () => {
   const navigate = useNavigate();
 
@@ -25,9 +25,12 @@ const UploadPage = () => {
   };
 
   return (
+  <>
+    <NavBar/>
     <div className="h-screen bg-gray-100 flex items-center justify-center">
       <InvoiceUpload onUpload={handleUpload} />
     </div>
+    </>
   );
 };
 
