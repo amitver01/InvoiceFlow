@@ -24,6 +24,7 @@ const Dashboard = () => {
           withCredentials: true,
         });
         setDashboardData(response.data);
+        console.log(response.data);
       } catch (err) {
         setError('Failed to fetch dashboard data');
         console.error(err);
