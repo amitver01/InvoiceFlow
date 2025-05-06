@@ -34,10 +34,10 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/logout`, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/logout`, null ,{
         withCredentials: true,
       });
-      window.location.reload();
+      //window.location.reload();
       navigate('/login');
     } catch (error) {
       console.error('Logout failed:', error);
