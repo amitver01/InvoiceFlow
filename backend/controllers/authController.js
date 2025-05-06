@@ -36,11 +36,12 @@ const login = async (req, res) => {
     // console.log("generated");
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? "None" : "Lax",
+      secure: true,            // Only send cookie over HTTPS
+      sameSite: "None",        // Required when using cross-site cookies
       path: "/",
-      maxAge: 30 * 60 * 1000
+      maxAge: 30 * 60 * 1000,  // 30 minutes
     });
+    
     
   
     res.status(200).json({ token, user: { id: user._id, name: user.name } });
@@ -52,14 +53,14 @@ const login = async (req, res) => {
 
 const logout = async (req , res)=>{
   try{
-    
     res.clearCookie("token", {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: "None",
       path: "/",
-      maxAge: 0,
     });
+    
+    
     res.status(200).json({ message: "Logged out successfully" });
   }
   catch(err){
