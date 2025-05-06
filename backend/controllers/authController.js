@@ -36,8 +36,8 @@ const login = async (req, res) => {
     // console.log("generated");
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? "None" : "Lax",
       path: "/",
       maxAge: 30 * 60 * 1000
     });
@@ -52,11 +52,13 @@ const login = async (req, res) => {
 
 const logout = async (req , res)=>{
   try{
+    
     res.clearCookie("token", {
       httpOnly: true,
       secure: false,
-      sameSite: "None",
+      sameSite: "Lax",
       path: "/",
+      maxAge: 0,
     });
     res.status(200).json({ message: "Logged out successfully" });
   }
