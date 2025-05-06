@@ -4,6 +4,7 @@ const Invoice = require('../models/invoiceModel');
 const getDashboardData = async (req, res) => {
   try {
     const userId = req.user.id; // assuming req.user is set via auth middleware
+    
     //console.log(userId);
     // Count only invoices created by the logged-in user
     const totalInvoices = await Invoice.countDocuments({ userId });
@@ -21,7 +22,7 @@ const getDashboardData = async (req, res) => {
       { $group: { _id: null, total: { $sum: '$amount' } } }
     ]);
     const totalRevenue = revenueResult[0]?.total || 0;
-    console.log(totalInvoices)
+    //console.log(totalInvoices)
     // Fetch the 20 most recent invoices for the user
     const recentInvoices = await Invoice.find({ userId })
       .sort({ createdAt: -1 })

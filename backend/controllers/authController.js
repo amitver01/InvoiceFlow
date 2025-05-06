@@ -49,4 +49,21 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signup, login };
+
+const logout = async (req , res)=>{
+  try{
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "None",
+      path: "/",
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+  }
+  catch(err){
+    res.status(500).json({message: "SERVER ERROR"});
+  }
+}
+
+
+module.exports = { signup, login , logout };

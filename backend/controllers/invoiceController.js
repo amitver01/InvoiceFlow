@@ -36,7 +36,7 @@ const extractTextAI = async (req, res) => {
     try {
       const cleanedText = extractedText.replace(/```json|```/g, "").trim();
       parsedData = JSON.parse(cleanedText);
-      console.log(parsedData);
+      //console.log(parsedData);
     } catch (error) {
       return res.status(500).json({ error: "AI response is not in JSON format", rawData: extractedText });
     }
