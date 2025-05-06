@@ -24,10 +24,7 @@ const InvoiceUploader = ({ onUpload }) => {
         `${import.meta.env.VITE_API_URL}/api/invoices/extract`,
         formData,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-           
-          },
+          withCredentials: true,
         }
       );
 
