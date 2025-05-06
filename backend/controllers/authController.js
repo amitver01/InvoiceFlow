@@ -56,7 +56,7 @@ const logout = async (req , res)=>{
     res.clearCookie("token", {
       httpOnly: true,
       secure: false,
-      sameSite: "Lax",
+      sameSite: "None",
       path: "/",
       maxAge: 0,
     });
